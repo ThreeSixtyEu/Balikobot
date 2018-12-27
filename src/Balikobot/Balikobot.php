@@ -729,6 +729,7 @@ class Balikobot
 
 		switch ($country) {
 			case self::COUNTRY_CZECHIA:
+			case self::COUNTRY_SLOVAKIA:
 				if (!preg_match('/^\d{5}$/', $zip)) {
 					throw new \InvalidArgumentException('Invalid zip code has been entered. Match XXXXX pattern.');
 				}
@@ -738,8 +739,8 @@ class Balikobot
 				throw new \UnexpectedValueException("Validation method is not implemented for $country country.");
 		}
 
-		if (!preg_match('/^\+420\d{9}$/', $phone)) {
-			throw new \InvalidArgumentException('Invalid phone has been entered. Match +420YYYYYYYYY pattern.');
+		if (!preg_match('/^\+42[0,1]\d{9}$/', $phone)) {
+			throw new \InvalidArgumentException('Invalid phone has been entered. Match +420(1)YYYYYYYYY pattern.');
 		}
 
 		$this->data['data']['rec_name'] = $name;
