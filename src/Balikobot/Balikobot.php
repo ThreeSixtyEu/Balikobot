@@ -360,7 +360,8 @@ class Balikobot
 		OPTION_NOTE_DRIVER = 'note_driver', /*< note */
 		OPTION_NOTE_CUSTOMER = 'note_recipient', /*< note for customer */
 		OPTION_AGE = 'require_full_age', /*< taking delivery requires full age; boolean */
-		OPTION_PASSWORD = 'password'; /*< taking delivery requires password */
+		OPTION_PASSWORD = 'password', /*< taking delivery requires password */
+		OPTION_RETURN_TRACK = 'return_track'; /*< return trackink link */
 
 	/**
 	 * CP shipper option services
@@ -1237,6 +1238,7 @@ class Balikobot
 					self::OPTION_ORDER,
 					self::OPTION_SERVICES,
 					self::OPTION_WEIGHT,
+					self::OPTION_RETURN_TRACK,
 				];
 
 			case self::SHIPPER_DPD:
@@ -1248,6 +1250,7 @@ class Balikobot
 					self::OPTION_INSURANCE,
 					self::OPTION_NOTE,
 					self::OPTION_WEIGHT,
+					self::OPTION_RETURN_TRACK,
 				];
 
 			case self::SHIPPER_GEIS:
@@ -1258,6 +1261,7 @@ class Balikobot
 					self::OPTION_INSURANCE,
 					self::OPTION_PAY_BY_CUSTOMER,
 					self::OPTION_NOTE,
+					self::OPTION_RETURN_TRACK,
 					// palette
 					self::OPTION_MU_TYPE,
 					self::OPTION_PIECES,
@@ -1276,6 +1280,7 @@ class Balikobot
 					self::OPTION_ORDER,
 					self::OPTION_BRANCH,
 					self::OPTION_WEIGHT,
+					self::OPTION_RETURN_TRACK,
 				];
 
 			case self::SHIPPER_INTIME:
@@ -1286,12 +1291,14 @@ class Balikobot
 					self::OPTION_INSURANCE,
 					self::OPTION_NOTE,
 					self::OPTION_WEIGHT,
+					self::OPTION_RETURN_TRACK,
 				];
 
 			case self::SHIPPER_PBH:
 				return [
 					self::OPTION_PRICE,
 					self::OPTION_ORDER,
+					self::OPTION_RETURN_TRACK,
 				];
 
 			case self::SHIPPER_PPL:
@@ -1308,6 +1315,7 @@ class Balikobot
 					self::OPTION_COMFORT,
 					self::OPTION_RETURN_OLD_HA,
 					self::OPTION_NOTE,
+					self::OPTION_RETURN_TRACK,
 				];
 
 			case self::SHIPPER_TOPTRANS:
@@ -1319,6 +1327,7 @@ class Balikobot
 					self::OPTION_WEIGHT,
 					self::OPTION_NOTE,
 					self::OPTION_COMFORT,
+					self::OPTION_RETURN_TRACK,
 				];
 
 			case self::SHIPPER_ULOZENKA:
@@ -1330,6 +1339,7 @@ class Balikobot
 					self::OPTION_NOTE,
 					self::OPTION_AGE,
 					self::OPTION_PASSWORD,
+					self::OPTION_RETURN_TRACK,
 				];
 
 			case self::SHIPPER_ZASILKOVNA:
@@ -1338,6 +1348,7 @@ class Balikobot
 					self::OPTION_ORDER,
 					self::OPTION_BRANCH,
 					self::OPTION_WEIGHT,
+					self::OPTION_RETURN_TRACK,
 				];
 		}
 
