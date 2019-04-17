@@ -2,13 +2,16 @@
 
 namespace ThreeSixtyEu\Balikobot;
 
+use Monolog\Logger;
+use Navigator\Application\Utils\Debugger;
+
 /**
  * @author Miroslav Merinsky <miroslav@merinsky.biz>
  * @version 1.0
  */
 class Balikobot
 {
-
+	const LOGGER_CHANNEL = 'balikobot';
 	/**
 	 * Requests
 	 */
@@ -450,6 +453,11 @@ class Balikobot
 	/** @var int */
 	private $activeApiBranch;
 
+	/**
+	 * @var Logger
+	 */
+	private $logger;
+
 	/** @var string */
 	private $apiUrl = 'https://api.balikobot.cz';
 
@@ -482,6 +490,7 @@ class Balikobot
 		}
 
 		$this->apiBranches = $apiBranches;
+		$this->logger = Debugger::getLogger(self::LOGGER_CHANNEL, Debugger::HANDLERS_AUX|Debugger::HANDLERS_DEFAULT);
 	}
 
 	/**
@@ -1552,8 +1561,11 @@ class Balikobot
 			throw new \InvalidArgumentException('Invalid argument has been entered.');
 		}
 
+		$targetUrl = $url ? "$this->apiUrl/$shipper/$request/$url" : "$this->apiUrl/$shipper/$request";
+		$this->logger->info('Sending request to URL ' . $targetUrl, $data);
+
 		$r = curl_init();
-		curl_setopt($r, CURLOPT_URL, $url ? "$this->apiUrl/$shipper/$request/$url" : "$this->apiUrl/$shipper/$request");
+		curl_setopt($r, CURLOPT_URL, $targetUrl);
 		curl_setopt($r, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($r, CURLOPT_HEADER, false);
 		if (!empty($data)) {
@@ -1570,6 +1582,8 @@ class Balikobot
 		);
 		$response = curl_exec($r);
 		curl_close($r);
+
+		$this->logger->info('Result of ' . $targetUrl, json_decode($response, true));
 
 		return json_decode($response, true);
 	}
