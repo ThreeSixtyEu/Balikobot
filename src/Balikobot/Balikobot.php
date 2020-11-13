@@ -1586,8 +1586,10 @@ class Balikobot
 		$jsonRes = json_decode($response, true);
 		if (is_null($jsonRes)) {
 			$jsonRes = [];
+			$this->logger->critical('Result of ' . $targetUrl, $jsonRes);
+		} else {
+			$this->logger->info('Result of ' . $targetUrl, $jsonRes);
 		}
-		$this->logger->info('Result of ' . $targetUrl, $jsonRes);
 
 		return json_decode($response, true);
 	}
