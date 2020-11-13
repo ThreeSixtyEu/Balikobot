@@ -1583,7 +1583,11 @@ class Balikobot
 		$response = curl_exec($r);
 		curl_close($r);
 
-		$this->logger->info('Result of ' . $targetUrl, json_decode($response, true));
+		$jsonRes = json_decode($response, true);
+		if (is_null($jsonRes)) {
+			$jsonRes = [];
+		}
+		$this->logger->info('Result of ' . $targetUrl, $jsonRes);
 
 		return json_decode($response, true);
 	}
