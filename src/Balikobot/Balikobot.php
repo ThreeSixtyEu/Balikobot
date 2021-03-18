@@ -1071,7 +1071,7 @@ class Balikobot
 			throw new \InvalidArgumentException('Invalid argument has been entered.');
 		}
 
-		$response = $this->call(self::REQUEST_TRACK, $shipper, ['id' => $carrierId]);
+		$response = $this->call(self::REQUEST_TRACK, $shipper, ['id' => $carrierId], null, 3);
 
 		if (isset($response['status']) && ($response['status'] != 200)) {
 			throw new \UnexpectedValueException(
@@ -1553,15 +1553,23 @@ class Balikobot
 	 * @param string $shipper
 	 * @param array $data
 	 * @param string $url
+	 * @param int $version
+	 *
 	 * @return array
 	 */
-	private function call($request, $shipper, array $data = [], $url = null)
+	private function call($request, $shipper, array $data = [], $url = null, int $version = 1)
 	{
 		if (empty($request) || empty ($shipper)) {
 			throw new \InvalidArgumentException('Invalid argument has been entered.');
 		}
 
-		$targetUrl = $url ? "$this->apiUrl/$shipper/$request/$url" : "$this->apiUrl/$shipper/$request";
+		if ($version > 1) {
+			$versionString = sprintf('v%d/', $version);
+		} else {
+			$versionString = '';
+		}
+
+		$targetUrl = $url ? "$this->apiUrl/$versionString$shipper/$request/$url" : "$this->apiUrl/$versionString$shipper/$request";
 		$this->logger->info('Sending request to URL ' . $targetUrl, $data);
 
 		$r = curl_init();
