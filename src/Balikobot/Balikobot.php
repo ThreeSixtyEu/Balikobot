@@ -2,8 +2,10 @@
 
 namespace ThreeSixtyEu\Balikobot;
 
+use InvalidArgumentException;
 use Monolog\Logger;
 use Navigator\Application\Utils\Debugger;
+use function sprintf;
 
 /**
  * @author Miroslav Merinsky <miroslav@merinsky.biz>
@@ -364,7 +366,10 @@ class Balikobot
 		OPTION_NOTE_CUSTOMER = 'note_recipient', /*< note for customer */
 		OPTION_AGE = 'require_full_age', /*< taking delivery requires full age; boolean */
 		OPTION_PASSWORD = 'password', /*< taking delivery requires password */
-		OPTION_RETURN_TRACK = 'return_track'; /*< return trackink link */
+		OPTION_RETURN_TRACK = 'return_track', /*< return trackink link */
+		OPTION_WIDTH = 'width',/* width of package in cm */
+		OPTION_LENGTH = 'length', /* length of package in cm */
+		OPTION_HEIGHT = 'height'; /* height of package in cm */
 
 	/**
 	 * CP shipper option services
@@ -555,7 +560,7 @@ class Balikobot
 	 */
 	public function service($shipper, $service, array $options = [])
 	{
-		if (sizeof($this->getServices($shipper)) > 0) {
+		if (count($this->getServices($shipper)) > 0) {
 			if (empty($shipper) || empty($service)) {
 				throw new \InvalidArgumentException('Invalid argument has been entered.');
 			}
@@ -587,6 +592,15 @@ class Balikobot
 				if (!isset($options[self::OPTION_PRICE])) {
 					throw new \InvalidArgumentException("The price option is required for $shipper shipper.");
 				}
+
+				if ($service === 'BN') {
+					foreach ([self::OPTION_HEIGHT, self::OPTION_LENGTH, self::OPTION_WIDTH] as $requiredOption) {
+						if (empty($options[$requiredOption])) {
+							throw new InvalidArgumentException(sprintf('%s is required for %s service', $requiredOption, $service));
+						}
+					}
+				}
+
 				break;
 
 			case self::SHIPPER_DPD:
@@ -1248,6 +1262,9 @@ class Balikobot
 					self::OPTION_SERVICES,
 					self::OPTION_WEIGHT,
 					self::OPTION_RETURN_TRACK,
+					self::OPTION_WIDTH,
+					self::OPTION_LENGTH,
+					self::OPTION_HEIGHT,
 				];
 
 			case self::SHIPPER_DPD:
@@ -1470,6 +1487,9 @@ class Balikobot
 
 			case self::OPTION_PRICE:
 			case self::OPTION_WEIGHT:
+			case self::OPTION_WIDTH:
+			case self::OPTION_LENGTH:
+			case self::OPTION_HEIGHT:
 				if (!is_numeric($value)) {
 					throw new \InvalidArgumentException("Invalid value of $name option has been entered. Enter float.");
 				}
